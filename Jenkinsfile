@@ -27,8 +27,9 @@ pipeline {
 	  bash <(curl -s https://codecov.io/bash) -t 3941b784-370b-4e50-a162-e5018b7c2861 -F jenkins_$STAGE_NAME -s $WORKSPACE
 	'''
 	sh '''#!/bin/bash -ex
-	  echo "I'm on $GIT_LOCAL_BRANCH."
-	  if [ $GIT_LOCAL_BRANCH = "master" ]
+	  source $HOME/bin/activate
+	  echo $GIT_LOCAL_BRANCH
+	  if [ $GIT_LOCAL_BRANCH = "master" ]; then
 	    echo "Which is good."
 	  fi
 	'''
