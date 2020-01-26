@@ -59,7 +59,7 @@ jobs:
           name: run tests
           command: |
             . venv/bin/activate
-            cd doc; make clean; make html
+            # cd doc; make clean; make html
 
       - store_artifacts:
           path: doc/build/html/
@@ -75,7 +75,7 @@ jobs:
             - "37:ad:c6:65:3e:d1:b4:7a:0a:8a:9d:df:a8:36:91:6d"
 
       - run:
-          bash tools/push_doc.sh doc/build/html
+          # bash tools/push_doc.sh doc/build/html
       
       - run:
           name: do asv
