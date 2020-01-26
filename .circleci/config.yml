@@ -84,11 +84,13 @@ jobs:
               wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
               bash ~/miniconda.sh -b -p $HOME/miniconda
               ~/miniconda/bin/conda create -n pyt numpy scipy
+              ~/miniconda/bin/conda init bash
               ~/miniconda/bin/conda activate pyt
               ~/miniconda/bin/conda install pytorch torchvision -c pytorch
       - run:
           name: do asv
           command: |
+            ~/miniconda/bin/conda init bash
             ~/miniconda/bin/conda activate pyt
             pip install asv
             cd ~/repo/benchmarks
