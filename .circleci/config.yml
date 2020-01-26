@@ -30,9 +30,9 @@ jobs:
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
 
-      - run:
-          name: Install Texlive
-          command: 'sudo apt update && sudo apt install dvipng texlive texlive-xetex texlive-fonts-extra texlive-latex-extra texlive-plain-extra'
+#       - run:
+#           name: Install Texlive
+#           command: 'sudo apt update && sudo apt install dvipng texlive texlive-xetex texlive-fonts-extra texlive-latex-extra texlive-plain-extra'
           
       - run:
           name: install dependencies
@@ -80,6 +80,7 @@ jobs:
       - run:
           name: do asv
           command: |
+            . venv/bin/activate
             pip install asv
             cd ~/repo/benchmarks
             asv run
