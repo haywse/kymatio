@@ -83,6 +83,7 @@ jobs:
             . venv/bin/activate
             pip install asv
             cd ~/repo/benchmarks
+            asv machine --yes
             asv run
             asv html
             
