@@ -78,9 +78,18 @@ jobs:
 #           bash tools/push_doc.sh doc/build/html
       
       - run:
+          name: install miniconda
+          command: |
+              cd ~
+              wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
+              bash ~/miniconda.sh -b -p $HOME/miniconda
+              ~/miniconda/bin/conda create -n pyt numpy scipy
+              ~/miniconda/bin/conda activate pyt
+              ~/miniconda/bin/conda install pytorch torchvision -c pytorch
+      - run:
           name: do asv
           command: |
-            . venv/bin/activate
+            ~/miniconda/bin/conda activate pyt
             pip install asv
             cd ~/repo/benchmarks
             asv machine --yes
