@@ -55,11 +55,11 @@ jobs:
       # other common Python testing frameworks include pytest and nose
       # https://pytest.org
       # https://nose.readthedocs.io
-      - run:
-          name: run tests
-          command: |
-            . venv/bin/activate
-            # cd doc; make clean; make html
+#       - run:
+#           name: run tests
+#           command: |
+#             . venv/bin/activate
+#             cd doc; make clean; make html
 
       - store_artifacts:
           path: doc/build/html/
@@ -74,12 +74,12 @@ jobs:
           fingerprints:
             - "37:ad:c6:65:3e:d1:b4:7a:0a:8a:9d:df:a8:36:91:6d"
 
-      - run:
-          # bash tools/push_doc.sh doc/build/html
+#       - run:
+#           bash tools/push_doc.sh doc/build/html
       
       - run:
           name: do asv
-          command:
+          command: |
             pip install asv
             cd ~/repo/benchmarks
             asv run
