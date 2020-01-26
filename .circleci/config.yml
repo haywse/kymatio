@@ -7,7 +7,7 @@ jobs:
   build:
     branches:
       only:
-        - master
+        - add_asv_to_circle_ci
     docker:
       # specify the version you desire here
       # use `-browsers` prefix for selenium tests, e.g. `3.6.1-browsers`
@@ -76,3 +76,12 @@ jobs:
 
       - run:
           bash tools/push_doc.sh doc/build/html
+      
+      - run:
+          name: do asv
+          command:
+            pip install asv
+            cd ~/repo/benchmarks
+            asv run
+            asv html
+            
