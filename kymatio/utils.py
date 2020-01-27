@@ -30,7 +30,7 @@ class ScatteringTransformer(BaseEstimator, TransformerMixin):
         self.signal_shape = signal_shape
         self.frontend = frontend
 
-        assert frontend in ['numpy','torch','tensorflow']
+        assert frontend in ['numpy','torch']
 
     def fit(self, X=None, y=None):
         # no fitting necessary
