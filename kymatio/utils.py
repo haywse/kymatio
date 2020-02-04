@@ -1,12 +1,11 @@
 from sklearn.base import BaseEstimator, TransformerMixin
-import torch
 
 
 class ScatteringTransformer(BaseEstimator, TransformerMixin):
     def __init__(self, S, signal_shape, frontend='numpy'):
         """Creates an object that is compatible with the scikit-learn API
         and implements the .transform method.
-        
+
         Parameters
         ==========
 
@@ -35,7 +34,11 @@ class ScatteringTransformer(BaseEstimator, TransformerMixin):
         return self
 
     def predict(self, X):
+        if self.frontend == 'torch':
+            import torch
+
         X_reshaped = X.reshape((-1,) + self.signal_shape)
+
         if self.frontend is 'torch':
             X_reshaped = torch.from_numpy(X_reshaped)
             if hasattr(self.scattering, "device"):
