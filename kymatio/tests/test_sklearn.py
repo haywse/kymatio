@@ -2,8 +2,8 @@ import os
 import io
 import numpy as np
 
-from kymatio.sklearn import ScatteringTransformer
-from kymatio.numpy import Scattering2D
+from kymatio.sklearn import Scattering2D as ScatteringTransformer2D
+from kymatio.numpy import Scattering2D as ScatteringNumPy2D
 
 def test_sklearn_transformer():
     test_data_dir = os.path.join(os.path.dirname(__file__), "..",
@@ -16,13 +16,14 @@ def test_sklearn_transformer():
     x = data['x']
     J = data['J']
 
-    S = Scattering2D(J, x.shape[2:])
+    S = ScatteringNumPy2D(J, x.shape[2:])
     Sx = S.scattering(x)
 
     x_raveled = x.reshape(x.shape[0], -1)
     Sx_raveled = Sx.reshape(x.shape[0], -1)
 
-    st = ScatteringTransformer(S, x[0].shape).fit()
+    st = ScatteringTransformer2D(J, x.shape[2:])
 
     t = st.transform(x_raveled)
+
     assert np.allclose(Sx_raveled, t)

@@ -1,5 +1,9 @@
 from sklearn.base import BaseEstimator, TransformerMixin
 
+from kymatio.numpy import Scattering1D as ScatteringNumPy1D
+from kymatio.numpy import Scattering2D as ScatteringNumPy2D
+from kymatio.numpy import HarmonicScattering3D as HarmonicScatteringNumPy3D
+
 
 class ScatteringTransformerMixin(BaseEstimator, TransformerMixin):
     def fit(self, x=None, y=None):
@@ -7,38 +11,35 @@ class ScatteringTransformerMixin(BaseEstimator, TransformerMixin):
         return self
 
     def predict(self, x):
-        x_reshaped = x.reshape((-1,) + self.S.shape)
+        n_samples = x.shape[0]
 
-        transformed = self.S.scattering(x_reshaped)
+        x = x.reshape((-1,) + self.shape)
 
-        Sx = transformed.reshape(x.shape[0], -1)
+        Sx = self.scattering(x)
+
+        Sx = Sx.reshape(n_samples, -1)
 
         return Sx
 
     transform = predict
 
 
-class ScatteringTransformer(ScatteringTransformerMixin):
-    def __init__(self, S, signal_shape):
-        """Creates an object that is compatible with the scikit-learn API
-        and implements the `.transform` method.
+class ScatteringTransformer1D(ScatteringNumPy1D, ScatteringTransformerMixin):
+    pass
 
-        Parameters
-        ==========
 
-        S: an instance of Scattering1D, Scattering2D or Scattering3D
-            This instance is called by the transformer.
+class ScatteringTransformer2D(ScatteringNumPy2D, ScatteringTransformerMixin):
+    pass
 
-        signal_shape: tuple of ints
-            The shape of one sample. The `scikit-learn` convention is to work
-            with 2D arrays only of shape `(n_samples, n_features)`. Data is
-            delivered in this way and has to be reshaped before transforming.
 
-        Output
-        ======
-        Y: ndarray of shape (n_samples, n_scattering_features)
-            The scattering coefficients, raveled in row-major order (C-like).
-        """
+class HarmonicScatteringTransformer3D(HarmonicScatteringNumPy3D,
+                                      ScatteringTransformerMixin):
+    pass
 
-        self.S = S
-        self.signal_shape = signal_shape
+
+Scattering1D = ScatteringTransformer1D
+Scattering2D = ScatteringTransformer2D
+HarmonicScattering3D = HarmonicScatteringTransformer3D
+
+
+__all__ = ['Scattering1D', 'Scattering2D', 'HarmonicScattering3D']
