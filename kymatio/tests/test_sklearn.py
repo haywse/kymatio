@@ -3,7 +3,7 @@ import torch
 import io
 import numpy as np
 
-from kymatio.utils import ScatteringTransformer
+from kymatio.sklearn import ScatteringTransformer
 from kymatio.scattering2d import Scattering2D
 
 def test_sklearn_transformer():
