@@ -5,8 +5,7 @@ Here we demonstrate a simple application of scattering as a transformer
 """
 
 
-from kymatio import Scattering2D
-from kymatio.utils import ScatteringTransformer
+from kymatio.sklearn import Scattering2D
 from sklearn.pipeline import Pipeline
 from sklearn.model_selection import train_test_split
 from sklearn import datasets
@@ -14,11 +13,8 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 
 
-# Use numpy or torch for the scattering
-frontend = 'numpy'
-
 # Create a scattering object (can be Scattering1D or Scattering3D as well)
-S = Scattering2D(shape=(8, 8), J=1, frontend=frontend)
+S = Scattering2D(shape=(8, 8), J=1)
 
 # Use the toy digits dataset (8x8 digits)
 digits = datasets.load_digits()
@@ -29,11 +25,10 @@ images = images.reshape((images.shape[0], -1))
 x_train, x_test, y_train, y_test = train_test_split(images, digits.target, test_size=0.5, shuffle=False)
 
 # Create the scikit-learn transformer
-st = ScatteringTransformer(S, digits.images[0].shape, frontend)
 
 # Create a classifier: a support vector classifier
 classifier = LogisticRegression()
-estimators = [('scatter', st), ('clf', classifier)]
+estimators = [('scatter', S), ('clf', classifier)]
 pipeline = Pipeline(estimators)
 
 # We learn the digits on the first half of the digits
