@@ -2,7 +2,7 @@ from sklearn.base import BaseEstimator, TransformerMixin
 
 
 class ScatteringTransformer(BaseEstimator, TransformerMixin):
-    def __init__(self, S, signal_shape, frontend='numpy'):
+    def __init__(self, S, signal_shape):
         """Creates an object that is compatible with the scikit-learn API
         and implements the `.transform` method.
 
@@ -17,9 +17,6 @@ class ScatteringTransformer(BaseEstimator, TransformerMixin):
             with 2D arrays only of shape `(n_samples, n_features)`. Data is
             delivered in this way and has to be reshaped before transforming.
 
-        frontend: string
-            The frontend of the `Scattering` object `S`.
-
         Output
         ======
         Y: ndarray of shape (n_samples, n_scattering_features)
@@ -28,31 +25,17 @@ class ScatteringTransformer(BaseEstimator, TransformerMixin):
 
         self.scattering = S
         self.signal_shape = signal_shape
-        self.frontend = frontend
-
-        assert frontend in ['numpy','torch']
 
     def fit(self, X=None, y=None):
         # no fitting necessary
         return self
 
     def predict(self, X):
-        if self.frontend == 'torch':
-            import torch
-
         X_reshaped = X.reshape((-1,) + self.signal_shape)
-
-        if self.frontend is 'torch':
-            X_reshaped = torch.from_numpy(X_reshaped)
-            if hasattr(self.scattering, "device"):
-                X_reshaped = X_reshaped.to(self.scattering.device)
 
         transformed = self.scattering(X_reshaped)
 
-        if self.frontend is 'torch':
-            output = transformed.detach().cpu().numpy().reshape(X.shape[0], -1)
-        else:
-            output = transformed.reshape(X.shape[0], -1)
+        output = transformed.reshape(X.shape[0], -1)
 
         return output
 
